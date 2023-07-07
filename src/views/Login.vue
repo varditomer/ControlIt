@@ -1,3 +1,20 @@
+
+<script setup lang="ts">
+import router from '@/router';
+import { ref } from 'vue';
+
+    const email = ref('');
+    const password = ref('');
+
+    const login = () => {
+      // Add your login logic here
+      console.log('Login:', email.value, password.value);
+      // Redirect to the accounts page if login is successful
+      router.push('/accounts');
+    };
+
+</script>
+
 <template>
   <v-container class="login-container">
     <v-card class="login-card">
@@ -13,28 +30,3 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import router from '@/router';
-import { ref } from 'vue';
-
-export default {
-  name: 'LoginPage',
-  setup() {
-    const email = ref('');
-    const password = ref('');
-
-    const login = () => {
-      // Add your login logic here
-      console.log('Login:', email.value, password.value);
-      // Redirect to the accounts page if login is successful
-      router.push('/accounts');
-    };
-
-    return {
-      email,
-      password,
-      login,
-    };
-  },
-};
-</script>
