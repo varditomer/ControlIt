@@ -1,17 +1,6 @@
 <script setup lang="ts">
-    // Import any required components or modules
-    import { RouterView } from 'vue-router'
-    import AppHeader from '@/components/AppHeader.vue'
-    
-    
-    // Define your component logic
-    // ...
-    
-    // Export the component
-    
-    
-    
-    
+import { RouterView } from 'vue-router'
+import AppHeader from '@/components/AppHeader.vue'
 </script>
 
 <template>
@@ -26,5 +15,7 @@
 
 
 <style>
-  html { overflow-y: auto !important }
+html {
+  overflow-y: auto !important
+}
 </style>
