@@ -1,7 +1,6 @@
 // extends UserCredentials without the password
 export interface User extends Omit<UserCredentials, 'password'> {
     _id: string,
-    name: string
 }
 
 export interface UserCredentials {

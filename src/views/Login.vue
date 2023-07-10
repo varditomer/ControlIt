@@ -7,9 +7,10 @@ import { ref } from 'vue'
 const userStore = useUserStore()
 
 const signupError = ref('')
+const isError = ref(false)
 const email = ref('')
 const password = ref('')
-const remember = ref(false)
+// const remember = ref(false)
 const rules = {
   required: (value: string) => value ? true : 'Field is required',
   emailFormat: (value: string) =>
@@ -18,7 +19,6 @@ const rules = {
 
 const performLogin = async () => {
   if (!isFormValid.value) return
-  console.log(`123:`, )
 
   const credentials = {
     email: email.value,
@@ -26,12 +26,12 @@ const performLogin = async () => {
   }
 
   try {
-    console.log(`12345:`, )
-    await userStore.login(credentials, remember.value)
-    console.log(`1234568:`, )
+    // await userStore.login(credentials, remember.value)
+    await userStore.login(credentials)
   } catch (error) {
     if (error instanceof Error) {
-      signupError.value = error.message
+      isError.value = true
+      signupError.value = 'Incorrect email or password!'
     } else {
       signupError.value = 'An error occurred during signup.'
     }
@@ -60,20 +60,21 @@ const isFormValid = computed(() => {
               <v-text-field type="password" v-model="password" label="Enter your password" name="password"
                 hint="Enter your password to access this website" prepend-inner-icon="mdi-lock" outlined
                 :rules="[rules.required]" clearable></v-text-field>
-              <v-btn type="submit" class="mt-4" block color="success" :disabled="!isFormValid" prepend-icon="mdi-login">Login</v-btn>
-              <div v-if="signupError" class="error-message">{{ signupError }}</div>
+              <v-btn type="submit" class="mt-4" block color="success" :disabled="!isFormValid"
+                prepend-icon="mdi-login">Login</v-btn>
             </v-form>
-            <v-card-actions class="text--secondary">
+            <!-- <v-card-actions class="text--secondary">
               <v-checkbox label="Remember me" v-model="remember" hide-details></v-checkbox>
-              <v-spacer></v-spacer>
-              <div>
-                No account? <router-link to="/signup" class="ml-1">Signup</router-link>
-              </div>
-            </v-card-actions>
+            </v-card-actions> -->
+            <v-snackbar v-model="isError" :timeout="3000" color="warning" outlined>
+              {{ signupError }}
+            </v-snackbar>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
+
+
 

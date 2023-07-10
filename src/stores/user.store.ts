@@ -1,26 +1,33 @@
-import type { User, UserCredentials, UserFront } from '@/interfaces/user.interface'
+import type { UserCredentials } from '@/interfaces/user.interface'
 import router from '@/router'
 import { userService } from '@/services/user.service'
 import { defineStore } from 'pinia'
 
-interface State {
-  // loggedinUser: User | null
-  loggedinUser: UserFront | null
+interface UserState {
+  userToken: string | null
 }
 
 export const useUserStore = defineStore({
   id: 'user',
-  state: () => <State>({
-    loggedinUser: userService.getLoggedinUser()
+  state: () => <UserState>({
+    userToken: userService.getUserToken()
   }),
   actions: {
     async login(credentials: UserCredentials, remember = false) {
-      console.log(`login in store:`,)
       try {
-        const user = userService.login(credentials, remember)
-        this.loggedinUser = user
-        router.push('/accounts')
-      } catch (error) {
+        const res = await userService.login(credentials, remember)
+        const token = res.data
+        if (token) {
+          // if (remember) userService.setToken(token)
+          // i tackled a problem with my storage service mechanism so i shut it down :(
+          this.userToken = token
+          router.push('/accounts')
+        } else {
+          throw new Error('Invalid token in response')
+        }
+        return
+      }
+      catch (error) {
         if (error instanceof Error) {
           throw new Error(error.message)
         }
@@ -28,23 +35,10 @@ export const useUserStore = defineStore({
         throw new Error('An error occurred during login.')
       }
     },
-    async signup(userDetails: UserFront, remember = false) {
-      try {
-        const user = userService.signup(userDetails, remember)
-        this.loggedinUser = user
-        router.push('/accounts')
-      } catch (error) {
-        if (error instanceof Error) {
-          throw new Error(error.message)
-        }
-        // Handle other error scenarios
-        throw new Error('An error occurred during signup.')
-      }
-    },
     async logout() {
-      this.loggedinUser = null
-      router.push('/')
       userService.logout()
+      this.userToken = null
+      router.push('/')
     }
   }
 
