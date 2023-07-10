@@ -6,11 +6,11 @@
     <v-btn icon @click="toggleTheme">
       <v-icon>{{ isDarkMode ? 'mdi-brightness-2' : 'mdi-brightness-5' }}</v-icon>
     </v-btn>
-    <v-btn v-if="true" icon>
+    <!-- <v-btn v-if="true" icon>
       <v-avatar color="info" size="x-small" class="">
         <v-icon icon="mdi-account-circle"></v-icon>
       </v-avatar>
-    </v-btn>
+    </v-btn> -->
   </v-app-bar>
 </template>
 
