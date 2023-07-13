@@ -28,7 +28,7 @@ import { useUserStore } from '@/stores/user.store';
 import { computed } from 'vue'
 import { useTheme } from 'vuetify'
 const userStore = useUserStore()
-const isUserLoggedIn = computed<boolean>(() => !!userStore.loginToken)
+const isUserLoggedIn = computed<boolean>(() => !!userStore.loginToken) // !! transform to boolean value
 const theme = useTheme()
 const isDarkMode = computed<boolean>(() => {
   return theme.global.current.value.dark
