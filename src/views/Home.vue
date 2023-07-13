@@ -1,6 +1,10 @@
 <template>
     <v-container class="d-flex flex-column justify-space-around fill-height">
-        <h1 class="text-center mb-3">Welcome to ControlIt</h1>
+        <h1 class="text-center mb-3 font-weight-medium">
+            Welcome to
+            <span class="font-weight-thin text-uppercase text-grey">Control</span>
+            <span class="font-weight-bold text-uppercase text-grey">It</span>
+        </h1>
         <v-img src="src/assets/imgs/control_it_img.jpg" alt="ControlIt image" :width="300" class="mx-auto home-page-img"
             contain></v-img>
         <v-row class="d-flex align-center">
@@ -21,7 +25,7 @@ import { computed } from 'vue'
 import { useUserStore } from '@/stores/user.store'
 
 const userStore = useUserStore()
-const isUserLoggedIn = computed<boolean>(() => !!userStore.loginToken) // !! transform to boolean value
+const isUserLoggedIn = computed<boolean>(() => !!userStore.loginToken) // !! transforms an expression check to boolean value
 
 
 </script>

@@ -1,86 +1,81 @@
 <template>
-    <v-container>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-select
-            v-model="selectedPartner"
-            :item-title="'name'"
-            :item-value="'_id'"
-            :items="[{_id:'All', name: 'All'}, ...partners]"
-            label="Select Partner"
-          ></v-select>
-        </v-col>
-      </v-row>
-      <v-row>
-          <v-table class="accounts-table" overflow-y-hidden>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Places</th>
-                <th>Actions</th>
+  <v-container>
+    <v-row>
+      <v-col cols="12" md="4">
+        <v-select v-model="selectedPartner" :item-title="'name'" :item-value="'_id'"
+          :items="[{ _id: 'All', name: 'All' }, ...partners]" label="Select Partner"></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-table class="accounts-table" style="overflow-y: hidden;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Places</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="selectedPartner === 'All'">
+            <template v-for="(partner) in partners">
+              <tr v-if="filteredAccountsByPartnerId(partner._id).length > 0" :key="`partner-${partner._id}`">
+                <td colspan="4">
+                  <h3 class="text-center">{{ partner.name }}</h3>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <template v-if="selectedPartner === 'All'">
-                <template v-for="(partner) in partners">
-                  <tr v-if="filteredAccountsByPartnerId(partner._id).length > 0" :key="`partner-${partner._id}`">
-                    <td colspan="4">
-                      <h3 class="text-center">{{ partner.name }}</h3>
-                    </td>
-                  </tr>
-                  <tr v-for="(account, i) in filteredAccountsByPartnerId(partner._id)" :key="account._id">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ account.name }}</td>
-                    <td>
-                      <v-row dense>
-                        <v-col cols="12">
-                          <v-sheet height="100px" class="overflow-y-auto">
-                            <ul>
-                              <li v-for="place in getRandomPlaces()" :key="place">
-                                {{ place }}
-                              </li>
-                            </ul>
-                          </v-sheet>
-                        </v-col>
-                      </v-row>
-                    </td>
-                    <td align="center">
-                      <v-btn color="primary" small @click="openImpersonateLink(account.url_code)">
-                        Impersonate
-                      </v-btn>
-                    </td>
-                  </tr>
-                </template>
-              </template>
-              <template v-else>
-                <tr v-for="(account, i) in filteredAccounts" :key="account._id">
-                  <td>{{ i + 1 }}</td>
-                  <td>{{ account.name }}</td>
-                  <td>
-                    <v-row dense>
-                      <v-col cols="12">
-                        <v-sheet height="100px" class="overflow-y-auto">
-                          <ul>
-                            <li v-for="place in getRandomPlaces()" :key="place">
-                              {{ place }}
-                            </li>
-                          </ul>
-                        </v-sheet>
-                      </v-col>
-                    </v-row>
-                  </td>
-                  <td>
-                    <v-btn color="primary" small @click="openImpersonateLink(account.url_code)">
-                      Impersonate
-                    </v-btn>
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </v-table>
-      </v-row>
-    </v-container>
+              <tr v-for="(account, i) in filteredAccountsByPartnerId(partner._id)" :key="account._id">
+                <td>{{ i + 1 }}</td>
+                <td>{{ account.name }}</td>
+                <td class="no-padding">
+                  <v-row dense>
+                    <v-col cols="12">
+                      <v-sheet align="center">
+                        <ul class="overflow-overlay">
+                          <li v-for="place in getRandomPlaces()" :key="place">
+                            {{ place }}
+                          </li>
+                        </ul>
+                      </v-sheet>
+                    </v-col>
+                  </v-row>
+                </td>
+                <td align="center">
+                  <v-btn color="primary" small @click="openImpersonateLink(account.url_code)">
+                    Impersonate
+                  </v-btn>
+                </td>
+              </tr>
+            </template>
+          </template>
+          <template v-else>
+            <tr v-for="(account, i) in filteredAccounts" :key="account._id">
+              <td>{{ i + 1 }}</td>
+              <td>{{ account.name }}</td>
+              <td class="no-padding">
+                  <v-row dense>
+                    <v-col cols="12">
+                      <v-sheet align="center">
+                        <ul class="overflow-overlay">
+                        <li v-for="place in getRandomPlaces()" :key="place">
+                          {{ place }}
+                        </li>
+                      </ul>
+                    </v-sheet>
+                  </v-col>
+                </v-row>
+              </td>
+              <td>
+                <v-btn color="primary" small @click="openImpersonateLink(account.url_code)">
+                  Impersonate
+                </v-btn>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </v-table>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -120,9 +115,13 @@ function getRandomPlaces() {
 
 <style scoped>
 .accounts-table {
-  overflow-y: hidden;
   width: 100%;
   border-collapse: collapse;
+}
+
+.accounts-table .v-table__wrapper {
+  background-color: black;
+  overflow: hidden !important;
 }
 
 th,
@@ -130,8 +129,13 @@ td {
   padding: 8px;
   border: 1px solid #ccc;
 }
+.no-padding {
+  padding: 0 !important;
+}
 
-.overflow-y-auto {
-  overflow-y: auto;
+.overflow-overlay {
+  max-height: 78px;
+  overflow: auto;
+  scrollbar-gutter: stable;
 }
 </style>

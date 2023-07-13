@@ -1,7 +1,8 @@
 <template>
   <v-app-bar scroll-behavior="elevate">
-    <v-app-bar-title @click="$router.push('/')" class="app-name">
-      ControlIt
+    <v-app-bar-title @click="$router.push('/')" class="app-name text-uppercase text-grey">
+      <span class="">Control</span>
+      <span class="font-weight-bold">It</span>
     </v-app-bar-title>
     <v-btn icon @click="toggleTheme">
       <v-icon>{{ isDarkMode ? 'mdi-brightness-2' : 'mdi-brightness-5' }}</v-icon>
@@ -28,7 +29,7 @@ import { useUserStore } from '@/stores/user.store';
 import { computed } from 'vue'
 import { useTheme } from 'vuetify'
 const userStore = useUserStore()
-const isUserLoggedIn = computed<boolean>(() => !!userStore.loginToken) // !! transform to boolean value
+const isUserLoggedIn = computed<boolean>(() => !!userStore.loginToken) // !! transforms an expression check to boolean value
 const theme = useTheme()
 const isDarkMode = computed<boolean>(() => {
   return theme.global.current.value.dark
