@@ -3,9 +3,11 @@
       <v-row>
         <v-col cols="12" md="4">
           <v-select
-            v-model="selectedPartnerId"
-            :items="['All', ...partnerIds]"
-            label="Select Partner ID"
+            v-model="selectedPartner"
+            :item-title="'name'"
+            :item-value="'_id'"
+            :items="[{_id:'All', name: 'All'}, ...partners]"
+            label="Select Partner"
           ></v-select>
         </v-col>
       </v-row>
@@ -20,14 +22,14 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="selectedPartnerId === 'All'">
-                <template v-for="(partnerId, index) in partnerIds">
-                  <tr v-if="filteredAccountsByPartnerId(partnerId).length > 0" :key="`partner-${partnerId}`">
+              <template v-if="selectedPartner === 'All'">
+                <template v-for="(partner) in partners">
+                  <tr v-if="filteredAccountsByPartnerId(partner._id).length > 0" :key="`partner-${partner._id}`">
                     <td colspan="4">
-                      <h3 class="text-center">{{ `Partner ID: ${partnerId}` }}</h3>
+                      <h3 class="text-center">{{ `Partner Name: ${partner.name}` }}</h3>
                     </td>
                   </tr>
-                  <tr v-for="(account, i) in filteredAccountsByPartnerId(partnerId)" :key="account._id">
+                  <tr v-for="(account, i) in filteredAccountsByPartnerId(partner._id)" :key="account._id">
                     <td>{{ i + 1 }}</td>
                     <td>{{ account.name }}</td>
                     <td>
@@ -82,28 +84,27 @@
 </template>
 
 <script setup lang="ts">
+import type { Partner } from '@/interfaces/account.interface';
 import { useAccountStore } from '@/stores/account.store'
 import { ref, computed } from 'vue'
 
-const selectedPartnerId = ref<string>('All') // Set 'All' as the default selection
+const selectedPartner = ref<string>('All') // Set 'All' as the default selection
 
 const accountStore = useAccountStore()
 
 const accounts = computed(() => accountStore.accounts)
-const partnerIds = computed(() => accountStore.partnerIds)
+const partners = computed(() => accountStore.partners)
 
 const filteredAccounts = computed(() => {
-  if (selectedPartnerId.value !== null && selectedPartnerId.value !== 'All') {
-    return accounts.value.filter((account) => account.partner_id === selectedPartnerId.value)
+  if (selectedPartner.value !== null && selectedPartner.value !== 'All') {
+    return accounts.value.filter((account) => account.partner_id === selectedPartner.value)
   }
   return accounts.value
 })
 
-function filteredAccountsByPartnerId(partnerId: string) {
-  if (partnerId === 'All') {
-    return accounts.value
-  }
-  return accounts.value.filter((account) => account.partner_id === partnerId)
+function filteredAccountsByPartnerId(partner: string) {
+  if (partner === 'All') return accounts.value
+  return accounts.value.filter((account) => account.partner_id === partner)
 }
 
 function openImpersonateLink(urlCode: string) {
