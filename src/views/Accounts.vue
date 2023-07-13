@@ -26,7 +26,7 @@
                 <template v-for="(partner) in partners">
                   <tr v-if="filteredAccountsByPartnerId(partner._id).length > 0" :key="`partner-${partner._id}`">
                     <td colspan="4">
-                      <h3 class="text-center">{{ `Partner Name: ${partner.name}` }}</h3>
+                      <h3 class="text-center">{{ partner.name }}</h3>
                     </td>
                   </tr>
                   <tr v-for="(account, i) in filteredAccountsByPartnerId(partner._id)" :key="account._id">
@@ -84,7 +84,6 @@
 </template>
 
 <script setup lang="ts">
-import type { Partner } from '@/interfaces/account.interface';
 import { useAccountStore } from '@/stores/account.store'
 import { ref, computed } from 'vue'
 

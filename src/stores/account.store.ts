@@ -1,8 +1,8 @@
 // account.store.js
 import { defineStore } from 'pinia'
 import { accountService } from '@/services/account.service'
-import type { Account, Partner } from '@/interfaces/account.interface';
-import { userService } from '@/services/user.service';
+import type { Account, Partner } from '@/interfaces/account.interface'
+import { userService } from '@/services/user.service'
 
 interface AccountState {
     accounts: Account[],
