@@ -10,7 +10,7 @@ const signupError = ref('')
 const isError = ref(false)
 const email = ref('')
 const password = ref('')
-// const remember = ref(false)
+
 const rules = {
   required: (value: string) => value ? true : 'Field is required',
   emailFormat: (value: string) =>
@@ -26,7 +26,6 @@ const performLogin = async () => {
   }
 
   try {
-    // await userStore.login(credentials, remember.value)
     await userStore.login(credentials)
   } catch (error) {
     if (error instanceof Error) {
@@ -36,6 +35,7 @@ const performLogin = async () => {
       signupError.value = 'An error occurred during signup.'
     }
   }
+  
 }
 
 
@@ -63,9 +63,6 @@ const isFormValid = computed(() => {
               <v-btn type="submit" class="mt-4" block color="success" :disabled="!isFormValid"
                 prepend-icon="mdi-login">Login</v-btn>
             </v-form>
-            <!-- <v-card-actions class="text--secondary">
-              <v-checkbox label="Remember me" v-model="remember" hide-details></v-checkbox>
-            </v-card-actions> -->
             <v-snackbar v-model="isError" :timeout="3000" color="warning" outlined>
               {{ signupError }}
             </v-snackbar>

@@ -1,18 +1,23 @@
 function saveToStorage(key: string, val: any) {
-    localStorage.setItem(key, JSON.stringify(val))
+    sessionStorage.setItem(key, JSON.stringify(val))
 }
 
 function loadFromStorage(key: string) {
-    var val: any = localStorage.getItem(key)
+    var val: any = sessionStorage.getItem(key)
     return JSON.parse(val)
 }
 
 function removeFromStorage(key: string) {
-    return localStorage.removeItem(key)
+    return sessionStorage.removeItem(key)
+}
+
+function clearStorage() {
+    sessionStorage.clear()
 }
 
 export const storageService = {
     saveToStorage,
     loadFromStorage,
-    removeFromStorage
+    removeFromStorage,
+    clearStorage
 }

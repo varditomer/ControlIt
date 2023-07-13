@@ -1,14 +1,14 @@
 import { httpService } from './http.service'
 
-const getAccounts = async () => {
+const getAccountsAndPartners = async (loginToken: string) => {
     try {
-        const response = await httpService.getWithToken('account')
-        return response.data
+        const res = await httpService.getWithToken('account', loginToken)
+        return res
     } catch (error) {
         console.error('Error retrieving accounts:', error)
         throw new Error('Failed to retrieve accounts.')
     }
 }
 export const accountService = {
-    getAccounts
+    getAccountsAndPartners
 }

@@ -5,7 +5,6 @@ const USER_KEY = 'user'
 const USERS_KEY = 'users'
 
 const _users = _getUsers() || []
-console.log(`_users:`, _users)
 const _loggedinUser = getLoggedinUser() || null
 
 const add = (credentials: UserCredentials, remember = false) => {
@@ -40,10 +39,8 @@ const login = (credentials: UserCredentials, remember: boolean) => {
 }
 
 const signup = (userDetails: UserFront, remember: boolean) => {
-    console.log(`userDetails:`, userDetails)
 
     const currentUser = _users.find(u => u.email === userDetails.email)
-    console.log(`currentUser:`, currentUser)
 
     if (currentUser) {
         throw new Error('Email already exist')

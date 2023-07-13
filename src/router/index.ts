@@ -20,22 +20,25 @@ const router = createRouter({
     {
       path: '/accounts',
       name: 'accounts',
-      component: () => import('@/views/Accounts.vue'),
+      component: () => import('@/views/Accounts.vue'), // lazy-loaded when the route is visited.
       meta: { requiresAuth: true }, // meta field to indicate authentication requirement
       beforeEnter: async (to, from, next) => {
+
         const userStore = useUserStore()
-        const token = userStore.userToken
+        const loginToken = userStore.loginToken
+
         const accountStore = useAccountStore()
-        if (token) {
+
+        if (loginToken) {
           try {
-            await accountStore.getAccounts()
+            await accountStore.getAccounts(loginToken)
             next()
           } catch (error) {
             console.error('Error retrieving account data:', error)
             next({ name: 'login' })
           }
         } else {
-          // Token does not exist, redirect to login page
+          // Login token does not exist => redirect to login page
           next({ name: 'login' })
         }
       }

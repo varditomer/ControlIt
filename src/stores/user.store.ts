@@ -4,26 +4,24 @@ import { userService } from '@/services/user.service'
 import { defineStore } from 'pinia'
 
 interface UserState {
-  userToken: string | null
+  loginToken: string | null
 }
 
 export const useUserStore = defineStore({
   id: 'user',
   state: () => <UserState>({
-    userToken: userService.getUserToken()
+    loginToken: userService.getLoginToken()
   }),
   actions: {
-    async login(credentials: UserCredentials, remember = false) {
+    async login(credentials: UserCredentials) {
       try {
-        const res = await userService.login(credentials, remember)
-        const token = res.data
-        if (token) {
-          // if (remember) userService.setToken(token)
-          // i tackled a problem with my storage service mechanism so i shut it down :(
-          this.userToken = token
+        const loginToken = await userService.login(credentials)
+        if (loginToken) {
+          // If login succeeded => set login token in store and redirect user to /accounts
+          this.loginToken = loginToken
           router.push('/accounts')
         } else {
-          throw new Error('Invalid token in response')
+          throw new Error('Login Fail')
         }
         return
       }
@@ -37,7 +35,7 @@ export const useUserStore = defineStore({
     },
     async logout() {
       userService.logout()
-      this.userToken = null
+      this.loginToken = null
       router.push('/')
     }
   }
